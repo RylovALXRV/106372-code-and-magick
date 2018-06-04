@@ -19,7 +19,6 @@ var getColors = function () {
   return 'rgba(0, 0, 255, ' + val + ')';
 };
 
-
 // функция для получения максимального времени
 var getMaxTime = function (arr) {
   return Math.max.apply(null, arr);
@@ -42,7 +41,7 @@ var getCloud = function (ctx, x, y, color) {
 
 var renderStatsBar = function (ctx, names, times) {
   var maxTime = getMaxTime(times);
-
+  var colors = [];
   for (var i = 0; i < names.length; i++) {
     // высота каждого прямоугольника
     barHeight = Math.round(times[i] * 100 / maxTime);
@@ -50,6 +49,14 @@ var renderStatsBar = function (ctx, names, times) {
     ctx.fillStyle = COLOR_BLACK;
     ctx.fillText(names[i], barWidth + (TEXT_WIDTH + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP * 3);
 
+    // проверка на повторяющийся цвет(больше в голову ничего не пришло, а эта работает)
+    while (colors) {
+      var color = getColors();
+      if (colors.indexOf(color) === -1) {
+        colors[i] = color;
+        break;
+      }
+    }
     // если есть 'Вы' - то рисуем и пропускаем цикл, чтобы еще раз не прорисовывать под этим рисунком одну копию себя
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
@@ -59,7 +66,7 @@ var renderStatsBar = function (ctx, names, times) {
       ctx.fillText(Math.round(times[i]), barWidth + (TEXT_WIDTH + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP * 6 - barHeight);
       continue;
     }
-    ctx.fillStyle = getColors();
+    ctx.fillStyle = colors[i];
     ctx.fillRect(barWidth + (TEXT_WIDTH + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP * 4, BAR_WIDTH, -barHeight);
 
     ctx.fillStyle = COLOR_BLACK;
