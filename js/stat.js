@@ -25,15 +25,27 @@ var getMaxTime = function (arr) {
 };
 
 var getCloud = function (ctx, x, y, color) {
-  // массив с координатами по оси X
-  var arrX = [x, 400, 520, 500, 520, 220, 100, 120, x];
-  // массив с координатами по оси Y
-  var arrY = [y, 30, 10, 200, 280, 260, 280, 90, y];
+  // координаты X и Y с учетом всех точек расположенных на плоскостях
+  var cords = [
+    {x: x, y: y},
+    {x: 300, y: 20},
+    {x: 120, y: -20},
+    {x: -20, y: 190},
+    {x: 20, y: 80},
+    {x: -300, y: -20},
+    {x: -120, y: 20},
+    {x: 20, y: -190},
+    {x: -20, y: -80}];
+  var cordX = 0;
+  var cordY = 0;
+
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.moveTo(x, y);
-  for (var i = 0; i < arrX.length; i++) {
-    ctx.lineTo(arrX[i], arrY[i]);
+  for (var i = 0; i < cords.length; i++) {
+    cordX = cordX + cords[i].x;
+    cordY += cords[i].y;
+    ctx.lineTo(cordX, cordY);
   }
   ctx.closePath();
   ctx.fill();
@@ -43,8 +55,9 @@ var renderStatsBar = function (ctx, names, times) {
   var maxTime = getMaxTime(times);
   var colors = [];
   for (var i = 0; i < names.length; i++) {
+    var barHeightMax = 150;
     // высота каждого прямоугольника
-    barHeight = Math.round(times[i] * 100 / maxTime);
+    barHeight = Math.round(times[i] * barHeightMax / maxTime);
 
     ctx.fillStyle = COLOR_BLACK;
     ctx.fillText(names[i], barWidth + (TEXT_WIDTH + BAR_WIDTH) * i, CLOUD_HEIGHT - GAP * 3);
@@ -82,8 +95,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = COLOR_BLACK;
   ctx.font = '16px PT Mono';
   ctx.textBaseline = 'hanging';
-  ctx.fillText('Ура вы победили!', CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2);
-  ctx.fillText('Список результатов:', CLOUD_X + GAP * 2, CLOUD_Y + GAP * 4);
+  ctx.fillText('Ура вы победили!', CLOUD_X + GAP * 2, CLOUD_Y + GAP + 5); // цифра 5 - небольшая поправка 10 - много, 0 - мало
+  ctx.fillText('Список результатов:', CLOUD_X + GAP * 2, CLOUD_Y + GAP * 3 + 5);
 
   renderStatsBar(ctx, names, times);
 };
