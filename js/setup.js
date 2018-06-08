@@ -1,14 +1,9 @@
 'use strict';
 
-// без .content. не работает - я в демке взял, да и на лекции показывали, по-другому не знаю как
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 document.querySelector('.setup').classList.remove('hidden');
 document.querySelector('.setup-similar').classList.remove('hidden');
-
-var fragment = document.createDocumentFragment();
-
-var wizards = [];
 
 var wizardNames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия',
   'Люпита', 'Вашингтон'];
@@ -21,41 +16,35 @@ var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)
 
 var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 
-var getRandomFeature = function (arr) {
-  var randValue = Math.floor(Math.random() * arr.length);
-  return arr[randValue];
+var getRandomFeature = function (features) {
+  return features[Math.floor(Math.random() * (features.length - 1))];
 };
 
 // создал одного волшебника
 var createWizard = function () {
-  var obj = {
+  return {
     name: getRandomFeature(wizardNames) + ' ' + getRandomFeature(wizardSurnames),
     coatColor: getRandomFeature(coatColors),
     eyesColor: getRandomFeature(eyesColors)
   };
-  return obj;
 };
 
-// сгенерировал массив из 4-х объектов(волшебников)
-for (var i = 0; i < 4; i++) {
-  wizards.push(createWizard());
-}
-
 // создал волшебника со всеми его свойствами на странице
-var renderWizard = function (arr) {
+var renderWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
-  wizardElement.querySelector('.setup-similar-label').textContent = arr.name;
-  wizardElement.querySelector('.wizard-coat').style.fill = arr.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = arr.eyesColor;
+  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
   return wizardElement;
 };
 
-// создал для всех волшебников свойства
-var renderSimilarWizards = function (arr) {
-  for (var j = 0; j < arr.length; j++) {
-    fragment.appendChild(renderWizard(arr[j]));
+// создал для волшебников свойства
+var renderSimilarWizards = function () {
+  var fragment = document.createDocumentFragment();
+  for (var j = 0; j < 4; j++) {
+    fragment.appendChild(renderWizard(createWizard()));
   }
-  return document.querySelector('.setup-similar-list').appendChild(fragment);
+  document.querySelector('.setup-similar-list').appendChild(fragment);
 };
 
-renderSimilarWizards(wizards);
+renderSimilarWizards();
