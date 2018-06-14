@@ -16,8 +16,11 @@ var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)
 
 var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 
+var fireballColors = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+
+// исправил функцию - при слиянии возможен конфликт
 var getRandomFeature = function (features) {
-  return features[Math.floor(Math.random() * (features.length - 1))];
+  return features[Math.round(Math.random() * (features.length - 1))];
 };
 
 // создал одного волшебника
@@ -48,3 +51,78 @@ var renderSimilarWizards = function () {
 };
 
 renderSimilarWizards();
+
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
+var userName = setup.querySelector('.setup-user-name');
+
+var ESC_CODE = 27;
+var ENTER_CODE = 13;
+
+var popupEscPress = function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', popupEscPress);
+};
+
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', popupEscPress);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_CODE) {
+    openPopup();
+  }
+});
+
+// не получается сделать правильно. Когда в фокусе не работает Esc, выходишь из фокуса Esc перестает работать
+userName.addEventListener('focus', function () {
+  document.removeEventListener('keydown', popupEscPress);
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    closePopup();
+  }
+});
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_CODE) {
+    closePopup();
+  }
+});
+
+var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
+var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
+var wizardFireball = document.querySelector('.setup-fireball-wrap');
+
+var featuresClickHandler = function (elem, features, selector) {
+  elem.style.fill = getRandomFeature(features);
+  document.querySelector(selector).value = elem.style.fill;
+};
+
+wizardCoat.addEventListener('click', function () {
+  featuresClickHandler(wizardCoat, coatColors, 'input[name=coat-color]');
+});
+
+wizardEyes.addEventListener('click', function () {
+  featuresClickHandler(wizardEyes, eyesColors, 'input[name=eyes-color]');
+});
+
+wizardFireball.addEventListener('click', function () {
+  // в backgroundColor добавляет rgb цвет почему-то, а не hex как нужно...
+  document.querySelector('input[name=fireball-color]').value = getRandomFeature(fireballColors);
+  wizardFireball.style.backgroundColor = document.querySelector('input[name=fireball-color]').value;
+});
