@@ -2,7 +2,6 @@
 
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
-document.querySelector('.setup').classList.remove('hidden');
 document.querySelector('.setup-similar').classList.remove('hidden');
 
 var wizardNames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия',
@@ -18,7 +17,6 @@ var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 
 var fireballColors = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-// исправил функцию - при слиянии возможен конфликт
 var getRandomFeature = function (features) {
   return features[Math.round(Math.random() * (features.length - 1))];
 };
@@ -60,6 +58,14 @@ var userName = setup.querySelector('.setup-user-name');
 var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
+var popupEscNotPress = function () {
+  userName.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ESC_CODE) {
+      evt.stopPropagation();
+    }
+  });
+};
+
 var popupEscPress = function (evt) {
   if (evt.keyCode === ESC_CODE) {
     closePopup();
@@ -85,15 +91,14 @@ setupOpen.addEventListener('keydown', function (evt) {
   }
 });
 
-// не получается сделать правильно. Когда в фокусе не работает Esc, выходишь из фокуса Esc перестает работать
 userName.addEventListener('focus', function () {
-  document.removeEventListener('keydown', popupEscPress);
+  popupEscNotPress();
 });
 
 setupClose.addEventListener('click', function () {
   closePopup();
 });
-setupClose.addEventListener('keydown', function (evt) {
+document.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ESC_CODE) {
     closePopup();
   }
@@ -122,7 +127,6 @@ wizardEyes.addEventListener('click', function () {
 });
 
 wizardFireball.addEventListener('click', function () {
-  // в backgroundColor добавляет rgb цвет почему-то, а не hex как нужно...
   document.querySelector('input[name=fireball-color]').value = getRandomFeature(fireballColors);
   wizardFireball.style.backgroundColor = document.querySelector('input[name=fireball-color]').value;
 });
