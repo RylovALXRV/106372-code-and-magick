@@ -2,8 +2,6 @@
 
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
-document.querySelector('.setup-similar').classList.remove('hidden');
-
 var wizardNames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия',
   'Люпита', 'Вашингтон'];
 
@@ -53,21 +51,12 @@ renderSimilarWizards();
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = document.querySelector('.setup-close');
-var userName = setup.querySelector('.setup-user-name');
 
 var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
-var popupEscNotPress = function () {
-  userName.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ESC_CODE) {
-      evt.stopPropagation();
-    }
-  });
-};
-
 var popupEscPress = function (evt) {
-  if (evt.keyCode === ESC_CODE) {
+  if (evt.keyCode === ESC_CODE && document.activeElement.tagName !== 'INPUT') {
     closePopup();
   }
 };
@@ -91,17 +80,8 @@ setupOpen.addEventListener('keydown', function (evt) {
   }
 });
 
-userName.addEventListener('focus', function () {
-  popupEscNotPress();
-});
-
 setupClose.addEventListener('click', function () {
   closePopup();
-});
-document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ESC_CODE) {
-    closePopup();
-  }
 });
 setupClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_CODE) {
@@ -130,3 +110,5 @@ wizardFireball.addEventListener('click', function () {
   document.querySelector('input[name=fireball-color]').value = getRandomFeature(fireballColors);
   wizardFireball.style.backgroundColor = document.querySelector('input[name=fireball-color]').value;
 });
+
+document.querySelector('.setup-similar').classList.remove('hidden');
