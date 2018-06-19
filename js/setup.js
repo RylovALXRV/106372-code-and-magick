@@ -55,7 +55,7 @@ var setupClose = document.querySelector('.setup-close');
 var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
-var popupEscPress = function (evt) {
+var popupEscPressHandler = function (evt) {
   if (evt.keyCode === ESC_CODE && document.activeElement.tagName !== 'INPUT') {
     closePopup();
   }
@@ -63,12 +63,12 @@ var popupEscPress = function (evt) {
 
 var openPopup = function () {
   setup.classList.remove('hidden');
-  document.addEventListener('keydown', popupEscPress);
+  document.addEventListener('keydown', popupEscPressHandler);
 };
 
 var closePopup = function () {
   setup.classList.add('hidden');
-  document.removeEventListener('keydown', popupEscPress);
+  document.removeEventListener('keydown', popupEscPressHandler);
 };
 
 setupOpen.addEventListener('click', function () {
