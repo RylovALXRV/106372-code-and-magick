@@ -48,7 +48,7 @@ var renderSimilarWizards = function () {
 
 renderSimilarWizards();
 
-var setup = document.querySelector('.setup');
+var setupElem = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = document.querySelector('.setup-close');
 
@@ -56,18 +56,18 @@ var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
 var popupEscPressHandler = function (evt) {
-  if (evt.keyCode === ESC_CODE && document.activeElement.tagName !== 'INPUT') {
+  if (evt.keyCode === ESC_CODE && document.activeElement !== document.querySelector('.setup-user-name')) {
     closePopup();
   }
 };
 
 var openPopup = function () {
-  setup.classList.remove('hidden');
+  setupElem.classList.remove('hidden');
   document.addEventListener('keydown', popupEscPressHandler);
 };
 
 var closePopup = function () {
-  setup.classList.add('hidden');
+  setupElem.classList.add('hidden');
   document.removeEventListener('keydown', popupEscPressHandler);
 };
 
@@ -83,8 +83,8 @@ setupOpen.addEventListener('keydown', function (evt) {
 setupClose.addEventListener('click', function () {
   closePopup();
 });
-setupClose.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_CODE) {
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_CODE && document.activeElement === setupClose) {
     closePopup();
   }
 });
