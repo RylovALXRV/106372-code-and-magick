@@ -56,7 +56,7 @@ var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
 var popupEscPressHandler = function (evt) {
-  if (evt.keyCode === ESC_CODE && document.activeElement !== document.querySelector('.setup-user-name')) {
+  if (evt.keyCode === ESC_CODE && !document.activeElement.classList.contains('setup-user-name')) {
     closePopup();
   }
 };
@@ -75,7 +75,7 @@ setupOpen.addEventListener('click', function () {
   openPopup();
 });
 setupOpen.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_CODE) {
+  if (evt.keyCode === ENTER_CODE && document.activeElement.classList.contains('setup-open-icon')) {
     openPopup();
   }
 });
@@ -84,7 +84,7 @@ setupClose.addEventListener('click', function () {
   closePopup();
 });
 document.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_CODE && document.activeElement === setupClose) {
+  if (evt.keyCode === ENTER_CODE && document.activeElement.classList.contains('setup-close')) {
     closePopup();
   }
 });
