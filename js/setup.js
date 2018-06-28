@@ -55,6 +55,11 @@ var setupClose = document.querySelector('.setup-close');
 var ESC_CODE = 27;
 var ENTER_CODE = 13;
 
+var resetStylesSetup = function () {
+  setupElem.style.top = '';
+  setupElem.style.left = '';
+};
+
 var popupEscPressHandler = function (evt) {
   if (evt.keyCode === ESC_CODE && !document.activeElement.classList.contains('setup-user-name')) {
     closePopup();
@@ -68,6 +73,7 @@ var openPopup = function () {
 
 var closePopup = function () {
   setupElem.classList.add('hidden');
+  resetStylesSetup();
   document.removeEventListener('keydown', popupEscPressHandler);
 };
 
