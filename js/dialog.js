@@ -1,8 +1,53 @@
 'use strict';
-// -------------------------- Задание №17 ----------------------------------------------
+
 (function () {
   var setupElem = document.querySelector('.setup');
   var setupUserPic = setupElem.querySelector('.upload');
+  var setupOpen = document.querySelector('.setup-open');
+  var setupClose = document.querySelector('.setup-close');
+
+  var ESC_CODE = 27;
+  var ENTER_CODE = 13;
+
+  var resetStylesSetup = function () {
+    setupElem.style.top = '';
+    setupElem.style.left = '';
+  };
+
+  var popupEscPressHandler = function (evt) {
+    if (evt.keyCode === ESC_CODE && !document.activeElement.classList.contains('setup-user-name')) {
+      closePopup();
+    }
+  };
+
+  var openPopup = function () {
+    setupElem.classList.remove('hidden');
+    document.addEventListener('keydown', popupEscPressHandler);
+  };
+
+  var closePopup = function () {
+    setupElem.classList.add('hidden');
+    resetStylesSetup();
+    document.removeEventListener('keydown', popupEscPressHandler);
+  };
+
+  setupOpen.addEventListener('click', function () {
+    openPopup();
+  });
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_CODE && document.activeElement.classList.contains('setup-open-icon')) {
+      openPopup();
+    }
+  });
+
+  setupClose.addEventListener('click', function () {
+    closePopup();
+  });
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_CODE && document.activeElement.classList.contains('setup-close')) {
+      closePopup();
+    }
+  });
 
   setupUserPic.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
